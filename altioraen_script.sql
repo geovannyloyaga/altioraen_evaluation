@@ -7,26 +7,6 @@ create database altioraen;
 
 use altioraen;
 
-alter table articles 
-   drop foreign key fk_articles_relations_order;
-
-alter table orders 
-   drop foreign key fk_order_relations_clients;
-
-
-alter table articles 
-   drop foreign key fk_articles_relations_order;
-
-drop table if exists articles;
-
-drop table if exists clients;
-
-
-alter table orders 
-   drop foreign key fk_order_relations_clients;
-
-drop table if exists orders;
-
 /*==============================================================*/
 /* Table: articles                                              */
 /*==============================================================*/
