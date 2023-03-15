@@ -6,8 +6,16 @@
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder"/>
+		<item key="selection" value="responseOrderList"/>
 		<list key="findhistory">
+			<item value="responseOrderList"/>
+			<item value="orden"/>
+			<item value="ordenes"/>
+			<item value="order"/>
+			<item value="Order"/>
+			<item value="client"/>
+			<item value="Client"/>
+			<item value="artículos"/>
 			<item value="org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder"/>
 			<item value="EntityManagerFactoryBuilder"/>
 			<item value="additionalProperties"/>
@@ -15,12 +23,14 @@
 			<item value="400"/>
 			<item value="CotizadorRespuestaListaDTO"/>
 			<item value="PboCliente"/>
-			<item value="PboDireccion"/>
-			<item value="CotizadorRespuestaDTO"/>
-			<item value="clienteCreado"/>
-			<item value="PboUsuario"/>
 		</list>
 		<list key="replacehistory">
+			<item value="artículo"/>
+			<item value="artículos"/>
+			<item value="article"/>
+			<item value="Article"/>
+			<item value="order"/>
+			<item value="Order"/>
 			<item value="409"/>
 			<item value="ResponseListDto"/>
 			<item value="Client"/>
