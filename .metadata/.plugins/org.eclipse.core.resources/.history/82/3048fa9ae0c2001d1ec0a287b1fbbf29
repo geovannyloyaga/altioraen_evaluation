@@ -1,0 +1,22 @@
+package com.altioraen.backend.apirest.dao;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.altioraen.backend.apirest.entities.Client;
+import com.altioraen.backend.apirest.interfaces.IClientDao;
+
+import jakarta.persistence.EntityManager;
+
+@Repository
+public class ClientDao implements IClientDao {
+
+	private EntityManager entityManager;
+	
+	@Override
+	public List<Client> entityList() {
+		return entityManager.createQuery("from client").getResultList();
+	}
+	
+}

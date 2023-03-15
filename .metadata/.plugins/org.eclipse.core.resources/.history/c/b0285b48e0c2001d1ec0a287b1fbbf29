@@ -1,0 +1,10 @@
+package com.altioraen.backend.apirest.dao;
+
+import org.springframework.stereotype.Repository;
+
+import com.altioraen.backend.apirest.interfaces.IClientDao;
+
+@Repository
+public class ClientDao implements IClientDao {
+	
+}

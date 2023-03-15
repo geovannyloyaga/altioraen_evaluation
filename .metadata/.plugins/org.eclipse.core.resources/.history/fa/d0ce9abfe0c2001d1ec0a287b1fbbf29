@@ -1,0 +1,10 @@
+package com.altioraen.backend.apirest.interfaces;
+
+import java.util.List;
+
+import com.altioraen.backend.apirest.entities.Client;
+
+public interface IClientDao {
+
+	public List<Client> entityList();
+}

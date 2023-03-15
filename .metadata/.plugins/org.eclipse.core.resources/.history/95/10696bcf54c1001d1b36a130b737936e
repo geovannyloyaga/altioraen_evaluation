@@ -1,0 +1,15 @@
+package com.altioraen.backend.apirest.spring.config;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@Configuration
+@PropertySource("classpath:db.properties")
+@EnableTransactionManagement
+@ComponentScans(value = { @ComponentScan("com.altioraen.backend.apirest.dao"), @ComponentScan("com.altioraen.backend.apirest.business.logic") })
+public class AltioraenConfig {
+
+}

@@ -1,0 +1,10 @@
+package com.altioraen.backend.apirest.business.logic;
+
+import org.springframework.stereotype.Service;
+
+import com.altioraen.backend.apirest.interfaces.IClientService;
+
+@Service
+public class ClientService implements IClientService {
+
+}

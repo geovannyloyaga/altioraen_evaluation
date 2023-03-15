@@ -1,0 +1,96 @@
+package com.altioraen.backend.apirest.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+
+import com.altioraen.backend.apirest.entities.Client;
+
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+
+@Repository
+public class ClientDao {
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
+	public Client addClient(Client client) {
+		Client createUser = null;
+		Session session = null;
+		try {
+			session = this.sessionFactory.getCurrentSession();
+			session.clear();
+			session.persist(client);
+			session.flush();
+			createUser = client;
+			return createUser;
+		} catch (Exception e) {
+			return createUser;
+		} finally {
+			createUser = null;
+			session = null;
+		}
+	}
+	
+	public Client updateClient(Client client) {
+		Client updateClient = null;
+		Session session = null;
+		try {
+			session = this.sessionFactory.getCurrentSession();
+			session.clear();
+			session.merge(client);
+			session.flush();
+			updateClient = client;
+			return updateClient;
+		} catch (Exception e) {
+			return updateClient;
+		} finally {
+			updateClient = null;
+			session = null;
+		}
+	}
+	
+	public List<Client> getClientList() {
+		List<Client> clientList = null;
+		Session session = null;
+		CriteriaBuilder criteriaBuilder = null; 
+		CriteriaQuery<Client> criteriaQuery = null;
+		Root<Client> root = null;
+		Query<Client> query = null;
+		try {
+			session = this.sessionFactory.getCurrentSession();
+			session.clear();
+			criteriaBuilder = session.getCriteriaBuilder();
+			criteriaQuery = criteriaBuilder.createQuery(Client.class);
+			root = criteriaQuery.from(Client.class);
+			criteriaQuery.select(root);
+			query = session.createQuery(criteriaQuery);
+			clientList = query.getResultList();
+			return clientList;
+		} catch(NoResultException nre){
+			return clientList;
+		} catch (Exception e) {
+			return clientList;
+		} finally {
+			clientList = null;
+			session = null;
+			criteriaBuilder = null;
+			criteriaQuery = null;
+			root = null;
+			query = null;
+		}
+	}
+}

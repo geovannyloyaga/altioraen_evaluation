@@ -1,0 +1,52 @@
+package com.altioraen.backend.apirest.dao;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.altioraen.backend.apirest.entities.Client;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+@Repository
+public class ClientDao {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+	
+	public List<Client> getClientList() {
+        List<Client> clients = null;
+		try {
+	        clients = entityManager.createQuery("FROM Client", Client.class).getResultList();
+	        return clients;
+		} catch (Exception e) {
+			return clients;
+		}  finally {
+			clients = null;
+		}
+	}
+	
+	public Client findById(Long id) {
+        return entityManager.find(Client.class, id);
+        try {
+			
+        } catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			// TODO: handle finally clause
+		}
+    }
+
+    public void save(Client client) {
+        entityManager.persist(client);
+    }
+
+    public void update(Client client) {
+        entityManager.merge(client);
+    }
+
+    public void delete(Client client) {
+        entityManager.remove(client);
+    }
+}

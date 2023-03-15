@@ -1,0 +1,134 @@
+package com.altioraen.backend.apirest.business.logic;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import com.altioraen.backend.apirest.dao.ClientDao;
+import com.altioraen.backend.apirest.dto.ResponseDto;
+import com.altioraen.backend.apirest.entities.Client;
+import com.altioraen.backend.apirest.interfaces.IClientService;
+
+@Service
+public class ClientService implements IClientService {
+
+	@Autowired
+	private ClientDao clientDao;
+
+	public void setClientDao(ClientDao clientDao) {
+		this.clientDao = clientDao;
+	}
+	
+	@Autowired
+	private PlatformTransactionManager transactionManager;
+	
+	public void setTransactionManager(PlatformTransactionManager transactionManager) {
+		this.transactionManager = transactionManager;
+	}
+
+	public ResponseDto<Client> agregarCliente(Client client) {
+		Client clientCreated = null;
+		ResponseDto<Client> responseClient = new ResponseDto<Client>(200, null, null);
+		
+		DefaultTransactionDefinition definirTransaccion = new DefaultTransactionDefinition();
+		definirTransaccion.setReadOnly(Boolean.FALSE);
+		definirTransaccion.setIsolationLevel(TransactionDefinition.ISOLATION_DEFAULT);
+		TransactionStatus statusTransaction = this.transactionManager.getTransaction(definirTransaccion);
+		
+		try {
+			clientCreated = this.clientDao.addClient(client);
+			if (clientCreated != null && clientCreated.getId() != null) {
+				responseClient.setResponseObject(clientCreated);
+				this.transactionManager.commit(statusTransaction);
+				responseClient.setCode(200);
+			} else {					
+				this.transactionManager.rollback(statusTransaction);
+				responseClient.setCode(400);
+				responseClient.setError("Error al momento de crear el cliente");
+			}
+			return responseClient;
+		} catch (Exception e) {
+			this.transactionManager.rollback(statusTransaction);
+			responseClient.setCode(400);
+			responseClient.setError("Error al momento de crear el cliente");
+			return responseClient;
+		} finally {
+			clientCreated = null;
+			responseClient = null;
+			definirTransaccion = null;
+			statusTransaction = null;
+		}
+	}
+	
+	public ResponseDto<Client> updateClient(Cliente client) {
+		Client clientUpdated = null;
+		List<Client> direccionListaActualizada = null;
+		PboEstado pboEstadoActivo = null;
+		ResponseDto<Client> respuestaCliente = new ResponseDto<Client>();
+		
+		DefaultTransactionDefinition definirTransaccion = new DefaultTransactionDefinition();
+		definirTransaccion.setReadOnly(Boolean.FALSE);
+		definirTransaccion.setIsolationLevel(TransactionDefinition.ISOLATION_DEFAULT);
+		TransactionStatus estadoTransaction = this.transactionManager.getTransaction(definirTransaccion);
+		
+		try {
+			clientUpdated = this.clientDao.updateClient(client);
+			if (clientUpdated != null && clientUpdated.getPcId() != null) {
+				respuestaCliente.setRespuestaObjeto(clientUpdated);
+				if (pboCliente.getDirecciones() != null && !pboCliente.getDirecciones().isEmpty()) {
+					for (Client pboDireccion : pboCliente.getDirecciones()) {
+						pboDireccion.setClient(new Client());
+						pboDireccion.getClient().setPcId(pboCliente.getClient().getPcId());
+						pboDireccion.setPboEstado(new PboEstado());
+						pboDireccion.getPboEstado().setPeId(pboEstadoActivo.getPeId());
+						pboDireccion.setPboUsuario(new PboUsuario());
+						pboDireccion.getPboUsuario().setPuId(pboCliente.getClient().getPboUsuario().getPuId());
+					}
+					direccionListaActualizada = this.pboDireccionDAO.actualizarDireccionLista(pboCliente.getDirecciones());
+					if (direccionListaActualizada != null && !direccionListaActualizada.isEmpty()) {
+						this.transactionManager.commit(estadoTransaction);
+						respuestaCliente.setCodigo(new BigInteger(CotizadorMensajeAplicacion.obtenerPropiedad("codigo_respuesta_ok")));
+						respuestaCliente.setTipo(CotizadorMensajeAplicacion.obtenerPropiedad("tipo_respuesta_updated_ok"));
+						respuestaCliente.setMensaje(CotizadorMensajeAplicacion.obtenerPropiedad("mensaje_respuesta_cliente_actualizado"));						
+					}else {
+						this.transactionManager.rollback(estadoTransaction);
+						respuestaCliente.setCodigo(new BigInteger(CotizadorMensajeAplicacion.obtenerPropiedad("codigo_respuesta_bad_request")));
+						respuestaCliente.setTipo(CotizadorMensajeAplicacion.obtenerPropiedad("tipo_respuesta_not_created"));
+						respuestaCliente.setMensaje(CotizadorMensajeAplicacion.obtenerPropiedad("mensaje_respuesta_cliente_no_actualizado"));
+					}
+				}else {
+					this.transactionManager.commit(estadoTransaction);
+					respuestaCliente.setCodigo(new BigInteger(CotizadorMensajeAplicacion.obtenerPropiedad("codigo_respuesta_ok")));
+					respuestaCliente.setTipo(CotizadorMensajeAplicacion.obtenerPropiedad("tipo_respuesta_updated_ok"));
+					respuestaCliente.setMensaje(CotizadorMensajeAplicacion.obtenerPropiedad("mensaje_respuesta_cliente_actualizado"));	
+				}
+			} else {
+				this.transactionManager.rollback(estadoTransaction);
+				respuestaCliente.setCodigo(new BigInteger(CotizadorMensajeAplicacion.obtenerPropiedad("codigo_respuesta_bad_request")));
+				respuestaCliente.setTipo(CotizadorMensajeAplicacion.obtenerPropiedad("tipo_respuesta_not_updated"));
+				respuestaCliente.setMensaje(CotizadorMensajeAplicacion.obtenerPropiedad("mensaje_respuesta_cliente_no_actualizado"));
+			}
+			return respuestaCliente;
+		} catch (Exception e) {
+			this.transactionManager.rollback(estadoTransaction);
+			LOGGER.error("Error to try actualizarCliente in Logica Negocio Layer: {}", e);
+			respuestaCliente.setCodigo(new BigInteger(CotizadorMensajeAplicacion.obtenerPropiedad("codigo_respuesta_internal_server_error")));
+			respuestaCliente.setTipo(CotizadorMensajeAplicacion.obtenerPropiedad("tipo_respuesta_internal_server_error"));
+			respuestaCliente.setMensaje(e.getMessage());
+			return respuestaCliente;
+		} finally {
+			autenticacion = null;
+			clientUpdated = null;
+			respuestaCliente = null;
+			pboEstadoActivo = null;
+			direccionListaActualizada = null;
+			definirTransaccion = null;
+			estadoTransaction = null;
+		}
+	}
+}

@@ -1,0 +1,11 @@
+package com.altioraen.backend.apirest.entities;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "clients")
+public class Client {
+
+	private int id; 
+}

@@ -1,0 +1,38 @@
+package com.altioraen.backend.apirest.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
+
+import com.altioraen.backend.apirest.entities.Client;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+@Repository
+public class ClientDao {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+	
+	public List<Client> getClientList() {
+        Session session = null;
+        Query<Client> query = null;
+        List<Client> clients = null;
+		try {
+			session = sessionFactory.getCurrentSession();
+	        query = session.createQuery("from Client", Client.class);
+	        clients = query.getResultList();
+	        return clients;
+		} catch (Exception e) {
+			return clients;
+		}  finally {
+			session = null;
+			query = null;
+			clients = null;
+		}
+	}
+	
+}

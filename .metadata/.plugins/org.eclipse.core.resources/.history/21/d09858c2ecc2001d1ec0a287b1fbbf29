@@ -1,0 +1,14 @@
+package com.altioraen.backend.apirest.interfaces;
+
+import com.altioraen.backend.apirest.dto.ResponseDto;
+import com.altioraen.backend.apirest.dto.ResponseListDto;
+import com.altioraen.backend.apirest.entities.Client;
+
+public interface IClientService {
+
+//	public ResponseDto<Client> addClient(Client client);
+//	
+//	public ResponseDto<Client> updateClient(Client client);
+	
+	public ResponseListDto<Client> getClientList();
+}

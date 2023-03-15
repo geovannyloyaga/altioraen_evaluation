@@ -1,0 +1,14 @@
+package com.altioraen.backend.apirest.interfaces;
+
+import java.util.List;
+
+import com.altioraen.backend.apirest.entities.Client;
+
+public interface IClientService {
+
+	public Client addClient(Client client);
+	
+	public Client updateClient(Client client);
+	
+	public List<Client> getClientList();
+}

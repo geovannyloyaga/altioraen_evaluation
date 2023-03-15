@@ -1,0 +1,26 @@
+package com.altioraen.backend.apirest.dao;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.altioraen.backend.apirest.entities.Client;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+@Repository
+public class ClientDao {
+
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	@SuppressWarnings("unchecked")
+	@Transactional(readOnly=true)
+	@Override
+	public List<Client> getClientList() {
+		return entityManager.createQuery("from client").getResultList();
+	}
+	
+}

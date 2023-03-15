@@ -1,0 +1,33 @@
+1678681657114	Rename local variable 'pboUsuario'
+1678681659780	Rename local variable 'cliente'
+1678681693112	Rename local variable 'crearUsuario'
+1678682217583	Rename local variable 'pboUsuario'
+1678682224847	Rename local variable 'editarUsuario'
+1678682232491	Rename local variable 'listaUsuario'
+1678682336183	Rename type 'IClient'
+1678682366889	Infer generic type arguments
+1678682371176	Delete element
+1678682857284	Rename local variable 'pboCliente'
+1678682880945	Rename local variable 'respuestaCliente'
+1678682936561	Rename local variable 'estadoTransaction'
+1678683403472	Rename local variable 'clienteActualizado'
+1678683581860	Rename local variable 'statusTransaction'
+1678683869816	Rename local variable 'respuestaListaCliente'
+1678683938741	Rename local variable 'listaClienteEncontrada'
+1678683942937	Rename local variable 'foundClientLis'
+1678849923246	Delete element
+1678852620296	Delete element
+1678852896188	Delete element
+1678854466322	Delete element
+1678855757476	Delete element
+1678856089734	Rename local variable 'clientCreated'
+1678856102030	Rename local variable 'clientCreated'
+1678856826047	Rename local variable 'clients'
+1678856859712	Rename local variable 'client'
+1678856863229	Rename local variable 'client'
+1678856867963	Rename local variable 'client'
+1678856873110	Rename local variable 'clientDeleted'
+1678856877678	Rename local variable 'clientUpdated'
+1678856882894	Rename local variable 'clientCreated'
+1678856890699	Rename local variable 'clientFound'
+1678857523196	Move compilation unit

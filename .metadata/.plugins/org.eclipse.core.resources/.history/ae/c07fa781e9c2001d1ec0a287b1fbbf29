@@ -1,0 +1,5 @@
+package com.altioraen.backend.apirest.spring.config;
+
+public class AltioraenConfig {
+
+}

@@ -1,0 +1,19 @@
+package com.altioraen.backend.apirest.business.logic;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.altioraen.backend.apirest.dao.ClientDao;
+import com.altioraen.backend.apirest.interfaces.IClientService;
+
+@Service
+public class ClientService implements IClientService {
+
+	@Autowired
+	private ClientDao clientDao;
+
+	public void setClientDao(ClientDao clientDao) {
+		this.clientDao = clientDao;
+	}
+	
+}

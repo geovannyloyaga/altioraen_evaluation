@@ -1,0 +1,38 @@
+package com.altioraen.backend.apirest.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.altioraen.backend.apirest.entities.Client;
+
+@Repository
+public class ClientDao {
+	
+	@Autowired
+    private SessionFactory sessionFactory;
+	
+	public List<Client> getClientList() {
+        Session session = null;
+        Query<Client> query = null;
+        List<Client> clients = null;
+		try {
+			session = sessionFactory.getCurrentSession();
+	        query = session.createQuery("from Client", Client.class);
+	        clients = query.getResultList();
+	        return clients;
+		} catch (Exception e) {
+			return clients;
+		}  finally {
+			session = null;
+			query = null;
+			clients = null;
+		}
+	}
+	
+}

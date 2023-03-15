@@ -1,0 +1,5 @@
+package com.altioraen.backend.apirest.interfaces;
+
+public interface IOrderService {
+
+}

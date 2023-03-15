@@ -1,0 +1,51 @@
+package com.altioraen.backend.apirest.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.altioraen.backend.apirest.dto.ResponseDto;
+import com.altioraen.backend.apirest.dto.ResponseListDto;
+import com.altioraen.backend.apirest.entities.Order;
+import com.altioraen.backend.apirest.interfaces.IOrderService;
+
+public class ArticleRestController {
+
+	@Autowired
+	private IOrderService orderService;
+	
+	public void setOrderService(IOrderService orderService) {
+		this.orderService = orderService;
+	}
+
+	@GetMapping("/getOrderList")
+	public ResponseListDto<Order> findAll(){
+		try {
+			ResponseListDto<Order> ordersFound = this.orderService.getOrderList();
+			return ordersFound;
+		} catch (Exception e) {
+			return new ResponseListDto<Order>(409, "Error para obtener lista de ordenes", null, 0);
+		}
+	}
+
+	@PostMapping("/save")
+	public ResponseDto<Order> save(@RequestBody Order requestOrder){
+		try {
+			ResponseDto<Order> orderCreated = this.orderService.save(requestOrder);
+			return orderCreated;
+		} catch (Exception e) {
+			return new ResponseDto<Order>(409, "Error al crear la orden", null);
+		}
+	}
+	
+	@PostMapping("/update")
+	public ResponseDto<Order> update(@RequestBody Order requestOrder){
+		try {
+			ResponseDto<Order> orderCreated = this.orderService.update(requestOrder);
+			return orderCreated;
+		} catch (Exception e) {
+			return new ResponseDto<Order>(409, "Error al actualizar la orden", null);
+		}
+	}
+}

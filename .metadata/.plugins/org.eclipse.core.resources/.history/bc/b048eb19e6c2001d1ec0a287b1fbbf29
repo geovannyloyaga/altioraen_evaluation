@@ -1,0 +1,7 @@
+spring.datasource.dbcp2.url=url=jdbc:mysql:://localhost/alioraen
+spring.datasource.dbcp2.username=root
+spring.datasource.dbcp2.password=Barcelona.1893
+spring.datasource.dbcp2.driver-class-name=com.mysql.jdbc.Driver
+spring.jpa.database-platform=org.hibernate.dialect.MySQL57Dialect
+spring.jpa.hibernate.ddl-auto=none
+logging.level.org.hibernate.SQL=debug

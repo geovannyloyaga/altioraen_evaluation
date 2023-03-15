@@ -1,0 +1,17 @@
+package com.altioraen.backend.apirest;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
+
+import com.altioraen.backend.apirest.spring.config.AltioraenConfig;
+
+@SpringBootApplication
+@Import(AltioraenConfig.class)
+public class AltioraenBackendApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(AltioraenBackendApplication.class, args);
+	}
+
+}

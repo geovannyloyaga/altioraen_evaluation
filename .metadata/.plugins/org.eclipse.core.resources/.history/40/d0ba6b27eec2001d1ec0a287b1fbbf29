@@ -1,0 +1,55 @@
+package com.altioraen.backend.apirest.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.altioraen.backend.apirest.dto.ResponseDto;
+import com.altioraen.backend.apirest.dto.ResponseListDto;
+import com.altioraen.backend.apirest.entities.Client;
+import com.altioraen.backend.apirest.interfaces.IClientService;
+
+@RestController
+@RequestMapping("/api/clients")
+public class ClientRestController {
+	
+	@Autowired
+	private IClientService clientService;
+	
+	public void setClientService(IClientService clientService) {
+		this.clientService = clientService;
+	}
+
+	@GetMapping("/getClientList")
+	public ResponseListDto<Client> findAll(){
+		try {
+			ResponseListDto<Client> clientsFound = this.clientService.getClientList();
+			return clientsFound;
+		} catch (Exception e) {
+			return new ResponseListDto<Client>(409, "Error para obtener lista de clientes", null, 0);
+		}
+	}
+
+	@PostMapping("/save")
+	public ResponseDto<Client> addClient(@RequestBody Client requestClient){
+		try {
+			ResponseDto<Client> clientCreated = this.clientService.addClient(requestClient);
+			return clientCreated;
+		} catch (Exception e) {
+			return new ResponseDto<Client>(409, "Error al crear cliente", null);
+		}
+	}
+	
+	@PostMapping("/update")
+	public ResponseDto<Client> updateClient(@RequestBody Client requestClient){
+		try {
+			ResponseDto<Client> clientCreated = this.clientService.addClient(requestClient);
+			return clientCreated;
+		} catch (Exception e) {
+			return new ResponseDto<Client>(409, "Error al actualizar cliente", null);
+		}
+	}
+}

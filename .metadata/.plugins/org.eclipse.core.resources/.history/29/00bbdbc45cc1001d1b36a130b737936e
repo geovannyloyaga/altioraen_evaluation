@@ -1,0 +1,139 @@
+package com.altioraen.backend.apirest.business.logic;
+
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import com.altioraen.backend.apirest.dao.ClientDao;
+import com.altioraen.backend.apirest.dto.ResponseDto;
+import com.altioraen.backend.apirest.dto.ResponseListDto;
+import com.altioraen.backend.apirest.entities.Client;
+import com.altioraen.backend.apirest.interfaces.IClientService;
+
+@Service
+public class ClientService implements IClientService {
+
+	@Autowired
+	private ClientDao clientDao;
+
+	public void setClientDao(ClientDao clientDao) {
+		this.clientDao = clientDao;
+	}
+	
+	@Autowired
+	private PlatformTransactionManager transactionManager;
+	
+	public void setTransactionManager(PlatformTransactionManager transactionManager) {
+		this.transactionManager = transactionManager;
+	}
+
+	public ResponseDto<Client> agregarCliente(Client client) {
+		Client clientCreated = null;
+		ResponseDto<Client> responseClient = new ResponseDto<Client>(200, null, null);
+		
+		DefaultTransactionDefinition definirTransaccion = new DefaultTransactionDefinition();
+		definirTransaccion.setReadOnly(Boolean.FALSE);
+		definirTransaccion.setIsolationLevel(TransactionDefinition.ISOLATION_DEFAULT);
+		TransactionStatus statusTransaction = this.transactionManager.getTransaction(definirTransaccion);
+		
+		try {
+			clientCreated = this.clientDao.addClient(client);
+			if (clientCreated != null && clientCreated.getId() != null) {
+				responseClient.setResponseObject(clientCreated);
+				this.transactionManager.commit(statusTransaction);
+				responseClient.setCode(200);
+			} else {					
+				this.transactionManager.rollback(statusTransaction);
+				responseClient.setCode(400);
+				responseClient.setError("Error al momento de crear el cliente");
+			}
+			return responseClient;
+		} catch (Exception e) {
+			this.transactionManager.rollback(statusTransaction);
+			responseClient.setCode(400);
+			responseClient.setError("Error al momento de crear el cliente");
+			return responseClient;
+		} finally {
+			clientCreated = null;
+			responseClient = null;
+			definirTransaccion = null;
+			statusTransaction = null;
+		}
+	}
+	
+	public ResponseDto<Client> updateClient(Client client) {
+		Client clientUpdated = null;
+		ResponseDto<Client> responseClient = new ResponseDto<Client>(200, null, null);
+		
+		DefaultTransactionDefinition definirTransaccion = new DefaultTransactionDefinition();
+		definirTransaccion.setReadOnly(Boolean.FALSE);
+		definirTransaccion.setIsolationLevel(TransactionDefinition.ISOLATION_DEFAULT);
+		TransactionStatus statusTransaction = this.transactionManager.getTransaction(definirTransaccion);
+		
+		try {
+			clientUpdated = this.clientDao.updateClient(client);
+			if (clientUpdated != null && clientUpdated.getId() != null) {
+				responseClient.setResponseObject(clientUpdated);
+				this.transactionManager.commit(statusTransaction);
+				responseClient.setCode(200);	
+			} else {
+				this.transactionManager.rollback(statusTransaction);
+				responseClient.setCode(400);
+				responseClient.setError("Error al momento de crear el cliente");
+			}
+			return responseClient;
+		} catch (Exception e) {
+			this.transactionManager.rollback(statusTransaction);
+			responseClient.setCode(400);
+			responseClient.setError("Error al momento de crear el cliente");
+			return responseClient;
+		} finally {
+			clientUpdated = null;
+			responseClient = null;
+			definirTransaccion = null;
+			statusTransaction = null;
+		}
+	}
+	
+	@Transactional(readOnly=true)
+	public ResponseListDto<Client> obtenerListaCliente(String autorizacion) {
+		ResponseListDto<Client> responseClientList = new ResponseListDto<>(200, null, new ArrayList<>(), 0);
+		List<Client> listaClienteEncontrada = null;
+		try {
+			autenticacion = JwtUtil.getAuthentication(autorizacion);
+			if (autenticacion != null && autenticacion.isAuthenticated()) {
+				listaClienteEncontrada = this.pboClienteDAO.obtenerListaCliente();
+				responseClientList.setRespuestaLista(listaClienteEncontrada);
+				if (listaClienteEncontrada.isEmpty()) {
+					responseClientList.setCodigo(new BigInteger(CotizadorMensajeAplicacion.obtenerPropiedad("codigo_respuesta_bad_request")));
+					responseClientList.setTipo(CotizadorMensajeAplicacion.obtenerPropiedad("tipo_respuesta_not_found"));
+					responseClientList.setMensaje(CotizadorMensajeAplicacion.obtenerPropiedad("mensaje_respuesta_lista_cliente_perdido"));
+				} else {
+					responseClientList.setCodigo(new BigInteger(CotizadorMensajeAplicacion.obtenerPropiedad("codigo_respuesta_ok")));
+					responseClientList.setTipo(CotizadorMensajeAplicacion.obtenerPropiedad("tipo_respuesta_found_ok"));
+					responseClientList.setMensaje(CotizadorMensajeAplicacion.obtenerPropiedad("mensaje_respuesta_lista_cliente_encontrado"));
+				}
+			}else {
+				responseClientList.setCodigo(new BigInteger(CotizadorMensajeAplicacion.obtenerPropiedad("codigo_respuesta_unauthorized")));
+				responseClientList.setTipo(CotizadorMensajeAplicacion.obtenerPropiedad("tipo_respuesta_unauthorized"));
+				responseClientList.setMensaje(CotizadorMensajeAplicacion.obtenerPropiedad("mensaje_respuesta_unauthorized"));
+			}
+			return responseClientList;
+		} catch (Exception e) {
+			LOGGER.error("Error to try obtenerListaCliente in Logica Negocio Layer:{}",e);
+			responseClientList.setCodigo(new BigInteger(CotizadorMensajeAplicacion.obtenerPropiedad("codigo_respuesta_internal_server_error")));
+			responseClientList.setTipo(CotizadorMensajeAplicacion.obtenerPropiedad("tipo_respuesta_internal_server_error"));
+			responseClientList.setMensaje(e.getMessage());
+			return responseClientList;
+		} finally {
+			autenticacion = null;
+			responseClientList = null;
+			listaClienteEncontrada = null;
+		}
+	}
+}

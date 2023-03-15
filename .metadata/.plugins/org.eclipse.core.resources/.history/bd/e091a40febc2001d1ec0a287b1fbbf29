@@ -1,0 +1,9 @@
+package com.altioraen.backend.apirest.interfaces;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.altioraen.backend.apirest.entities.Client;
+
+public interface ClientRepository extends JpaRepository<Client, Long> {
+
+}

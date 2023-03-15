@@ -1,0 +1,42 @@
+package com.altioraen.backend.apirest.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.altioraen.backend.apirest.dto.ResponseListDto;
+import com.altioraen.backend.apirest.entities.Client;
+import com.altioraen.backend.apirest.interfaces.IClientService;
+
+@RestController
+@RequestMapping("/api/clients")
+public class ClientRestController {
+	
+	@Autowired
+	private IClientService clientService;
+	
+	public void setClientService(IClientService clientService) {
+		this.clientService = clientService;
+	}
+
+	@GetMapping("/getClientList")
+	public ResponseListDto<Client> findAll(){
+		try {
+			List<User> usersFound = userService.findAll();
+			return new ResponseListDto<User>(200, null, usersFound, usersFound.size());
+		} catch (Exception e) {
+			return new ResponseListDto<User>(409, "Error para obtener lista de usuarios".concat(messageFile), null, 0);
+		}
+	}
+
+	@PostMapping("/save")
+	public ResponseDto<User> save(@RequestBody RequestUserDto requestUser){
+		try {
+			User usersCreated = userService.save(requestUser);
+			return new ResponseDto<User>(200, null, usersCreated);
+		} catch (Exception e) {
+			return new ResponseDto<User>(409, "Error para obtener lista de usuarios".concat(messageFile), null);
+		}
+	}
+}

@@ -1,0 +1,8 @@
+package com.altioraen.backend.apirest.business.logic;
+
+import com.altioraen.backend.apirest.interfaces.IClientService;
+
+@Service
+public class ClientService implements IClientService {
+
+}
